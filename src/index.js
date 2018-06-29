@@ -19,15 +19,15 @@ printer.on('ready', () => {
 
 // create the fans
 // NOTE: only works on the Rpi
-// const fans = new Relay({ pin: 5 });
+// const fans = new Relay({ pin: 17 });
 // fans.turnOn();
-// fans.turnOff();
+// setTimeout(() => fans.turnOff(), 1000);
 
 // create the resistor
 // NOTE: only works on the Rpi
-// const resistor = new Relay({ pin: 6 });
+// const resistor = new Relay({ pin: 27 });
 // resistor.turnOn();
-// resistor.turnOff();
+// setTimeout(() => resistor.turnOff(), 1000);
 
 // closing process nicely
 process.on('SIGINT', () => process.exit(0));
