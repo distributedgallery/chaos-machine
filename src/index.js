@@ -1,5 +1,6 @@
-const Cash = require('./cash');
-const Printer = require('./printer');
+const Cash = require('./devices/cash');
+const Printer = require('./devices/printer');
+const Relay = require('./devices/relay');
 
 // create the cash machine
 const cash = new Cash({ port: '/dev/tty.usbserial-A600LEFH' });
@@ -16,6 +17,18 @@ printer.on('ready', () => {
 	printer.print('https://drangies.fr');
 });
 
+// create the fans
+// NOTE: only works on the Rpi
+// const fans = new Relay({ pin: 5 });
+// fans.turnOn();
+// fans.turnOff();
+
+// create the resistor
+// NOTE: only works on the Rpi
+// const resistor = new Relay({ pin: 6 });
+// resistor.turnOn();
+// resistor.turnOff();
+
 // closing process nicely
 process.on('SIGINT', () => process.exit(0));
 process.on('uncaughtException', err => {
@@ -27,4 +40,6 @@ process.on('uncaughtException', err => {
 process.on('exit', () => {
 	cash.close();
 	printer.close();
+	fans.close();
+	resistor.close();
 });
