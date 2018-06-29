@@ -3,14 +3,14 @@ const Printer = require('./devices/printer');
 const Relay = require('./devices/relay');
 
 // create the cash machine
-const cash = new Cash({ port: '/dev/tty.usbserial-A600LEFH' });
+const cash = new Cash({ port: '/dev/cash' });
 // cash machine is ready
 cash.on('ready', () => console.log('[Cash] ready'));
 // cash machine accepted a note
 cash.on('accepted', console.log);
 
 // create the printer machine
-const printer = new Printer({ port: '/dev/tty.usbserial' });
+const printer = new Printer({ port: '/dev/printer' });
 // printer machine is ready
 printer.on('ready', () => {
 	console.log('[Printer] ready');

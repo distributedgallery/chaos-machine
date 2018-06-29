@@ -1,2 +1,2 @@
-SUBSYSTEM=="usb-serial", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="cash"
-SUBSYSTEM=="usb-serial", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", SYMLINK+="printer"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="cash"
+ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", SYMLINK+="printer"
