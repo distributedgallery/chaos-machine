@@ -24,9 +24,7 @@ class Printer extends EventEmitter {
 			lines.forEach(line => this.printer.printLine(line.substring(2, line.length - 2)));
 			this.printer.writeCommands([27, 50]);
 			this.printer.lineFeed(2);
-			this.printer.print(() => {
-				this.emit('done');
-			});
+			this.printer.print(() => this.emit('done', text));
 		});
 	}
 

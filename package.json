@@ -11,6 +11,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@xavier.seignard/ssp": "^0.1.7",
+		"lcd": "^2.0.3",
 		"onoff": "^3.1.0",
 		"qrcode": "^1.2.0",
 		"serialport": "^6.2.0",
