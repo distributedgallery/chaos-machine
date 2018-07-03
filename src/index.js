@@ -35,7 +35,7 @@ printer.on('done', data => console.log(`[Printer] printed ${data}`));
 // NOTE: only works on the Rpi
 // const lcd = new Lcd({ rs: 25, e: 24, data: [23, 17, 27, 22] });
 // lcd.on('ready', () => {
-// 	lcd.print('test', err => {
+// 	lcd.write('test', err => {
 // 		if (err) console.log(err);
 // 	});
 // });
