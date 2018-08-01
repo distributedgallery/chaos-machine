@@ -1,0 +1,60 @@
+@import './src/sass/variables'
+
+#app
+  color: $txt-color
+
+  font-family: $font-stack
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+  font-size: 1.2rem
+  line-height: 1.4em
+
+  h1
+    background: linear-gradient(#f80759, #bc4e9c)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    font-family: $title-font-stack
+    font-size: 6em
+    margin: 3em, auto
+    line-height: 1.2em
+
+  h2, h3, h4
+    font-family: $subtitle-font-stack
+    text-transform: uppercase
+
+  h2
+    font-size: 1.3rem
+
+  h3
+    font-size: 1.25rem
+
+  h4
+    font-size: 1.2rem
+
+  a
+    font-weight: bold
+    cursor: pointer
+    display: inline-block
+    position: relative
+    z-index: 2
+    transition: all .2s ease-in-out
+    &::after
+      content: ""
+
+      background-color: $red
+
+      height: 2px
+      width: 100%
+
+      position: absolute
+      bottom: 4px
+      left: 0
+      z-index: -1
+
+      transition: height .3s ease-in-out, bottom .3s ease-in-out
+
+    &:hover
+      &::after
+        bottom: 4px
+        height: 4px
