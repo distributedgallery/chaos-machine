@@ -3,7 +3,12 @@
   "version": "1.0.1",
   "description": "Solidity smart contracts for the Chaos Machine",
   "keywords": [
-    "ethereum, solidity, chaos, machine, jukebox"
+    "ethereum",
+    "solidity",
+    "distributedgallery",
+    "chaos",
+    "machine",
+    "jukebox"
   ],
   "author": "Distributed Gallery <contact@distributedgallery.com>",
   "contributors": [
