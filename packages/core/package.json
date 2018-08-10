@@ -1,7 +1,10 @@
 {
   "name": "@chaosmachine/core",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Solidity smart contracts for the Chaos Machine",
+  "keywords": [
+    "ethereum, solidity, chaos, machine, jukebox"
+  ],
   "author": "Distributed Gallery <contact@distributedgallery.com>",
   "contributors": [
     "Olivier Sarrouy <olivier@ryhope.network>"
