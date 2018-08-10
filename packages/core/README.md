@@ -1,6 +1,5 @@
 <div align="center">
   <img align="center" src="https://raw.githubusercontent.com/distributedgallery/chaos-machine/master/.design/logo.png" height="300px" />
-  <h1></h1>
 </div>
 
 ## Installation
@@ -11,7 +10,7 @@ npm install --save @chaosmachine/core
 
 ### Usage
 
-See the [`test`](/test) directory for examples.
+See the [`test`](test) directory for examples.
 
 ## License
 
