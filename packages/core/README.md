@@ -8,7 +8,7 @@
 npm install --save @chaosmachine/core
 ```
 
-### Usage
+## Usage
 
 See the [`test`](test) directory for examples.
 
