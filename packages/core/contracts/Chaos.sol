@@ -81,6 +81,11 @@ contract Chaos is Migratable, RBAC {
     emit TrackRemoved(cid);
   }
 
+  function shuffle() public view returns (string) {
+    uint index = uint(keccak256(abi.encodePacked(blockhash(block.number-1)))) % tracks.length;
+    return tracks[index].cid;
+  }
+
   function _updateAdmin(address _old, address _new) private {
     addRole(_new, ROLE_ADMIN);
     removeRole(_old, ROLE_ADMIN);
@@ -105,11 +110,6 @@ contract Chaos is Migratable, RBAC {
   function _revokeToken(address _token) private {
     removeRole(_token, ROLE_TOKEN);
     emit TokenRevoked(_token);
-  }
-
-  function shuffle() public view returns (string) {
-    uint index = uint(keccak256(block.blockhash(block.number-1))) % tracks.length;
-    return tracks[index].cid;
   }
 
 }
