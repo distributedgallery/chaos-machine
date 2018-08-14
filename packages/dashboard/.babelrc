@@ -1,6 +1,12 @@
 {
-  "presets": [
-    "env",
-    "vue"
+  "presets": ["env", "es2017", "stage-0", "vue"],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
   ]
 }

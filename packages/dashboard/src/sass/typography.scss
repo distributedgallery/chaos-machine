@@ -1,0 +1,29 @@
+@import './src/sass/variables';
+
+#app {
+  color: $white;
+  font-family: $font-stack;
+  font-size: 1em;
+  line-height: 1.3em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: $title-font-stack;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    color: $cream;
+    font-size: 5em;
+    line-height: 1.2em;
+  }
+
+  a {
+    color: $white;
+    text-decoration: underline 1px solid $white;
+  }
+}

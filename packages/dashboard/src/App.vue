@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    prout
+      <canvas class="particles"></canvas>
+      <notifications group="all" width='400'/>
     <router-view></router-view>
   </div>
 </template>
@@ -12,37 +13,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import './src/sass/reset';
-@import './sass/fonts';
-@import './sass/variables';
-@import './sass/typography';
-
-html,
-body,
-#app {
-  background-color: $bg-color;
-  text-align: center;
-}
+@import './src/sass/app';
 </style>
-<!-- <template>
-  <div id="app">
-    <h1>{{ msg }}</h1>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'app',
-  data() {
-    return {
-      msg: 'Welcome to Your Vue.js App!'
-    }
-  }
-}
-</script>
-
-<style lang="css">
-  #app {
-    color: #56b983;
-  }
-</style> -->

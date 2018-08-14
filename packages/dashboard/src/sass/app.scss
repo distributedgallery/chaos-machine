@@ -1,0 +1,55 @@
+@import '/src/sass/reset';
+@import '/src/sass/variables';
+@import '/src/sass/typography';
+
+html,
+body {
+  margin: 0;
+}
+
+#app {
+  background-color: #333333;
+  text-align: center;
+  min-height: 100vh;
+
+  .particles {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  .fullscreen {
+    min-height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .page {
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    // align-items: center;
+    justify-content: space-evenly;
+    // justify-content: space-around;
+    // min-height: 100%;
+
+    .title {
+      flex: 0 1 auto;
+    }
+
+    .content {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+}

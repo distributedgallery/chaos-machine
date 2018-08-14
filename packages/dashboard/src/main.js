@@ -1,46 +1,31 @@
-// import Vue from 'vue'
-// import App from './App.vue'
-//
-// /* eslint-disable no-new */
-// new Vue({
-//   el: '#app',
-//   router,
-//   template: '<App/>',
-//   components: { App }
-// })
-
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
-import router from './router/index'
+import Notifications from 'vue-notification'
 
-// new Vue({
-//   el: '#app',
-//   render: h => h(App)
-// })
+import router from './router/index'
+import store from './store'
+// import VueParticles from 'vue-particles'
+import Particles from 'particlesjs'
+// npm install particlesjs --save
+
+Vue.use(Vuex)
+Vue.use(Notifications)
+// Vue.use(VueParticles)
 
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
 
-// export function createApp() {
-//   const app = new Vue({
-//     el: '#app',
-//     router,
-//     render: h => h(App),
-//     components: { app }
-//   })
-//
-//   // expose the app and the router
-//   // return { app, router }
-// }
-//
-// window.onload = () => {
-//   new Vue({
-//     el: '#app',
-//     router,
-//     render: h => h(App),
-//     components: { App }
-//   })
-// }
+window.addEventListener('load', () => {
+  Particles.init({
+    selector: '.particles',
+    color: '#666666',
+    maxParticles: 450,
+    connectParticles: true
+  })
+  store.commit('init')
+})
