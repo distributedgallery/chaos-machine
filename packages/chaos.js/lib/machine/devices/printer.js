@@ -1,56 +1,39 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var serialport_1 = __importDefault(require("serialport"));
-var qrcode_1 = __importDefault(require("qrcode"));
-var thermalprinter_1 = __importDefault(require("thermalprinter"));
-var events_1 = __importDefault(require("events"));
-var Printer = /** @class */ (function (_super) {
-    __extends(Printer, _super);
-    function Printer(opts) {
-        var _this = _super.call(this) || this;
+const serialport_1 = __importDefault(require("serialport"));
+const qrcode_1 = __importDefault(require("qrcode"));
+const thermalprinter_1 = __importDefault(require("thermalprinter"));
+const events_1 = __importDefault(require("events"));
+class Printer extends events_1.default {
+    constructor(opts) {
+        super();
         if (!opts.port)
             throw new Error('[Printer] Please specify a serial port!');
-        _this.serialPort = new serialport_1.default(opts.port, {
+        this.serialPort = new serialport_1.default(opts.port, {
             baudRate: 19200,
         });
-        _this.serialPort.on('open', function () {
-            _this.printer = new thermalprinter_1.default(_this.serialPort);
-            _this.printer.on('ready', function () { return _this.emit('ready'); });
+        this.serialPort.on('open', () => {
+            this.printer = new thermalprinter_1.default(this.serialPort);
+            this.printer.on('ready', () => this.emit('ready'));
         });
-        return _this;
     }
-    Printer.prototype.print = function (text) {
-        var _this = this;
-        qrcode_1.default.toString(text, function (err, result) {
-            var lines = result.split('\n');
-            _this.printer.setLineSpacing(0);
-            _this.printer.center();
-            lines.forEach(function (line) { return _this.printer.printLine(line.substring(2, line.length - 2)); });
-            _this.printer.writeCommands([27, 50]);
-            _this.printer.lineFeed(2);
-            _this.printer.print(function () { return _this.emit('done', text); });
+    print(text) {
+        qrcode_1.default.toString(text, (err, result) => {
+            const lines = result.split('\n');
+            this.printer.setLineSpacing(0);
+            this.printer.center();
+            lines.forEach(line => this.printer.printLine(line.substring(2, line.length - 2)));
+            this.printer.writeCommands([27, 50]);
+            this.printer.lineFeed(2);
+            this.printer.print(() => this.emit('done', text));
         });
-    };
-    Printer.prototype.close = function () {
+    }
+    close() {
         if (this.serialPort && this.serialPort.isOpened)
             this.serialPort.close();
-    };
-    return Printer;
-}(events_1.default));
+    }
+}
 exports.default = Printer;
