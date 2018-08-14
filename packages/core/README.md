@@ -1,5 +1,5 @@
 <div align="center">
-  <img align="center" src="https://raw.githubusercontent.com/distributedgallery/chaos-machine/master/.design/logo.png" height="300px" />
+  <img align="center" src="https://raw.githubusercontent.com/distributedgallery/chaos-machine/master/.github/logo.png" height="300px" />
 </div>
 
 ## Installation
@@ -8,10 +8,10 @@
 npm install --save @chaosmachine/core
 ```
 
-## Usage
+## API
 
-See the [`test`](test) directory for examples.
+Coming soon
 
 ## License
 
-Do whatever you want © 2018 Distributed Gallery
+DGAS © 2018 Distributed Gallery
