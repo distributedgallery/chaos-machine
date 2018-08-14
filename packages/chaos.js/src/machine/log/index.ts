@@ -10,19 +10,19 @@ export default class Log {
   }
 
   public info(message: string) {
-    const line = '[' + new Date(Date.now()).toISOString() + ']' + message + '\n'
+    const line = '[' + new Date(Date.now()).toISOString() + ']' + message
     console.log(line)
-    fs.appendFile(this.machine.paths['log'], line, (err) => {
+    fs.appendFile(this.machine.paths['log'], line + '\n', (err) => {
       if (err) {
-        this.error(message)
+        this.error('[log]' + message)
       }
     })
   }
 
   public error(message: string) {
-    const line = '[' + new Date(Date.now()).toISOString() + ']' + '[error]' + message + '\n'
+    const line = '[' + new Date(Date.now()).toISOString() + ']' + '[error]' + message
     console.log(line)
-    fs.appendFile(this.machine.paths['log'], line, (err) => {
+    fs.appendFile(this.machine.paths['log'], line + '\n', (err) => {
       if (err) {
         console.log(err)
       }

@@ -6,7 +6,8 @@
     "max-line-length": [true, 120],
     "align": [true, "parameters", "statements", "members", "elements"],
     "semicolon": [true, "never"],
-    "quotemark": [true, "single"]
+    "quotemark": [true, "single"],
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
   },
   "rulesDirectory": []
 }

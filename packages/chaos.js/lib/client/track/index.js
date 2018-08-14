@@ -9,7 +9,6 @@ class Track {
         this.client = client;
     }
     async upload(buffer) {
-        console.log('upload');
         const results = await this.client.ipfs.files.add(buffer, { pin: true });
         return results[0].hash;
     }

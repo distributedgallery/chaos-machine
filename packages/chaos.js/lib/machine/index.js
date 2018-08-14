@@ -34,13 +34,12 @@ let Lcd;
         Lcd = await Promise.resolve().then(() => __importStar(require('./devices/lcd-spoof')));
     }
 })();
-/* tslint:enable:statements-aligned*/
 const DEFAULTS = {
     ADDRESS: '0x7e8dcb7432b8356635f2820b8e92fa6d760609fe',
     DEVICES: false,
     ETHEREUM: 'https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09',
     IPFS: 'https://ipfs.infura.io:5001',
-    MNEMONIC: 'journey nice rather ball theme used uncover gate pond rifle between state',
+    MNEMONIC: 'journey nice rather ball theme used uncover gate pond rifle between state'
 };
 class Machine {
     static async launch(opts) {
@@ -60,17 +59,13 @@ class Machine {
                 machine.log.error(err);
             }
             else {
-                machine.log.info('[event][TokenGranted][machine:' +
-                    result.args.machine +
-                    '][token:' +
-                    result.args.token +
-                    ']');
+                machine.log.info('[event:TokenGranted][machine:' + result.args.machine + '][token:' + result.args.token + ']');
                 machine.audio.shuffle();
             }
         });
         return machine;
     }
-    constructor({ ipfs = DEFAULTS.IPFS, ethereum = DEFAULTS.ETHEREUM, mnemonic = DEFAULTS.MNEMONIC, address = DEFAULTS.ADDRESS, devices = DEFAULTS.DEVICES, } = {}) {
+    constructor({ ipfs = DEFAULTS.IPFS, ethereum = DEFAULTS.ETHEREUM, mnemonic = DEFAULTS.MNEMONIC, address = DEFAULTS.ADDRESS, devices = DEFAULTS.DEVICES } = {}) {
         // IPFS
         const url = url_parse_1.default(ipfs);
         this.ipfs = ipfs_api_1.default(url.hostname, url.port, { protocol: url.protocol.slice(0, -1) });
@@ -88,8 +83,9 @@ class Machine {
         this.paths = {
             log: path_1.default.join(os_1.default.homedir(), '.chaos', 'log'),
             root: path_1.default.join(os_1.default.homedir(), '.chaos'),
-            tracks: path_1.default.join(os_1.default.homedir(), '.chaos', 'tracks'),
+            tracks: path_1.default.join(os_1.default.homedir(), '.chaos', 'tracks')
         };
+        // components
         this.log = new log_1.default(this);
         this.track = new track_1.default(this);
         this.audio = new audio_1.default(this);
@@ -101,7 +97,6 @@ class Machine {
             this.lcd = new Lcd({ rs: 25, e: 24, data: [23, 17, 27, 22] });
             // this.fans 		= new Relay({ pin: 4 })
             // this.resistor = new Relay({ pin: 3 })
-            //
             this.cash.on('ready', () => this.log.info('[cash][ready]'));
             this.printer.on('ready', () => this.log.info('[printer][ready]'));
             this.lcd.on('ready', () => {
@@ -110,12 +105,11 @@ class Machine {
                     this.log.error(err.toString());
                 });
             });
+            // exist process nicely
             process.on('SIGINT', () => process.exit(0));
             process.on('uncaughtException', (err) => {
                 this.log.error(err.toString());
-                setTimeout(() => {
-                    process.exit(1);
-                }, 500);
+                setTimeout(() => { process.exit(1); }, 500);
             });
             process.on('exit', () => {
                 this.cash.close();

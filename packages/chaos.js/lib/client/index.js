@@ -11,10 +11,10 @@ const track_1 = __importDefault(require("./track"));
 const DEFAULTS = {
     ADDRESS: '0x7e8dcb7432b8356635f2820b8e92fa6d760609fe',
     IPFS: 'https://ipfs.infura.io:5001',
-    PROVIDER: new web3_1.default.providers.HttpProvider('http://localhost:8545'),
+    PROVIDER: new web3_1.default.providers.HttpProvider('http://localhost:8545')
 };
 class Client {
-    constructor({ ipfs = DEFAULTS.IPFS, provider = DEFAULTS.PROVIDER, address = DEFAULTS.ADDRESS, } = {}) {
+    constructor({ ipfs = DEFAULTS.IPFS, provider = DEFAULTS.PROVIDER, address = DEFAULTS.ADDRESS } = {}) {
         // IPFS
         const url = url_parse_1.default(ipfs);
         this.ipfs = ipfs_api_1.default(url.hostname, url.port, { protocol: url.protocol.slice(0, -1) });

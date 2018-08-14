@@ -9,18 +9,18 @@ class Log {
         this.machine = machine;
     }
     info(message) {
-        const line = '[' + new Date(Date.now()).toISOString() + ']' + message + '\n';
+        const line = '[' + new Date(Date.now()).toISOString() + ']' + message;
         console.log(line);
-        fs_1.default.appendFile(this.machine.paths['log'], line, (err) => {
+        fs_1.default.appendFile(this.machine.paths['log'], line + '\n', (err) => {
             if (err) {
-                this.error(message);
+                this.error('[log]' + message);
             }
         });
     }
     error(message) {
-        const line = '[' + new Date(Date.now()).toISOString() + ']' + '[error]' + message + '\n';
+        const line = '[' + new Date(Date.now()).toISOString() + ']' + '[error]' + message;
         console.log(line);
-        fs_1.default.appendFile(this.machine.paths['log'], line, (err) => {
+        fs_1.default.appendFile(this.machine.paths['log'], line + '\n', (err) => {
             if (err) {
                 console.log(err);
             }
