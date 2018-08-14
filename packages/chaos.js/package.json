@@ -1,42 +1,58 @@
 {
-	"name": "@chaosmachine/chaos.js",
-	"version": "1.0.0",
-	"description": "",
-	"main": "lib/index.js",
-	"scripts": {
-		"build": "tsc",
-		"watch": "tsc --watch",
-		"test": "node_modules/.bin/_mocha --require babel-core/register --exit --timeout 20000 test/index.js",
-		"test:fixtures": "node -r esm test/mocks/index.js"
-	},
-	"author": "",
-	"license": "MIT",
-	"devDependencies": {
-		"@types/node": "^10.5.7",
-		"babel-core": "^6.26.3",
-		"babel-preset-es2015": "^6.24.1",
-		"babel-preset-stage-0": "^6.24.1",
-		"chai": "^4.1.2",
-		"chai-as-promised": "^7.1.1",
-		"dirty-chai": "^2.0.1",
-		"mocha": "^5.1.0",
-		"typescript": "^3.0.1"
-	},
-	"dependencies": {
-		"@chaosmachine/core": "^1.0.2",
-		"@xavier.seignard/ssp": "^0.1.7",
-		"esm": "^3.0.74",
-		"eth-crypto": "^1.2.3",
-		"ipfs-api": "^23.0.0",
-		"lcd": "^2.0.3",
-		"onoff": "^3.1.0",
-		"qrcode": "^1.2.0",
-		"serialport": "^6.2.0",
-		"sound-player": "^1.0.13",
-		"thermalprinter": "^0.3.8",
-		"truffle-contract": "^3.0.6",
-		"truffle-hdwallet-provider": "0.0.6",
-		"url-parse": "^1.4.3",
-		"web3": "0.20.6"
-	}
+  "name": "@chaosmachine/chaos.js",
+  "version": "2.0.0",
+  "description": "Typescript / javascript library for the Chaos Machine",
+  "keywords": [
+    "ethereum",
+    "ipfs",
+    "distributedgallery",
+    "chaos",
+    "machine",
+    "jukebox"
+  ],
+  "author": "Distributed Gallery <contact@distributedgallery.com>",
+  "contributors": [
+    "Olivier Sarrouy <olivier@ryhope.network>",
+    "Xavier Seignard <xavier.seignard@gmail.com>"
+  ],
+  "license": "(GPL-3.0-or-later OR MIT)",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "lint": "./node_modules/.bin/tslint --fix src/**/*.ts{,x}",
+    "test": "node_modules/.bin/_mocha --require babel-core/register --require babel-polyfill --exit --timeout 20000 test/index.js",
+    "test:demo": "node -r esm test/demo/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.7",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "dirty-chai": "^2.0.1",
+    "mocha": "^5.1.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "@chaosmachine/core": "^1.0.2",
+    "@xavier.seignard/ssp": "^0.1.7",
+    "esm": "^3.0.74",
+    "eth-crypto": "^1.2.3",
+    "ipfs-api": "^23.0.0",
+    "lcd": "^2.0.3",
+    "onoff": "^3.1.0",
+    "qrcode": "^1.2.0",
+    "serialport": "^6.2.0",
+    "sound-player": "^1.0.13",
+    "thermalprinter": "^0.3.8",
+    "truffle-contract": "^3.0.6",
+    "truffle-hdwallet-provider": "0.0.6",
+    "url-parse": "^1.4.3",
+    "web3": "0.20.6"
+  }
 }

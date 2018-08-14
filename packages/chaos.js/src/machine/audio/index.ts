@@ -11,10 +11,11 @@ export default class Audio {
     this.player  = new player({ player: 'mpg123', filename: '' })
   }
 
-  public async shuffle() {
+  public async shuffle(): Promise<string> {
     const hash = await this.machine.contract.shuffle()
     this.machine.log.info('[shuffle][' + hash + ']')
     this.play(hash)
+    return hash
   }
 
   public async play(hash: string) {

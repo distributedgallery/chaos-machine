@@ -54,7 +54,7 @@ var Audio = /** @class */ (function () {
                         hash = _a.sent();
                         this.machine.log.info('[shuffle][' + hash + ']');
                         this.play(hash);
-                        return [2 /*return*/];
+                        return [2 /*return*/, hash];
                 }
             });
         });
