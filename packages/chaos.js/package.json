@@ -18,8 +18,8 @@
   "license": "(GPL-3.0-or-later OR MIT)",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "build": "./node_modules/.bin/tsc",
+    "watch": "./node_modules/.bin/tsc --watch",
     "lint": "./node_modules/.bin/tslint --fix src/**/*.ts{,x}",
     "test": "node_modules/.bin/_mocha --require babel-core/register --require babel-polyfill --exit --timeout 20000 test/index.js",
     "test:demo": "node -r esm test/demo/index.js"
