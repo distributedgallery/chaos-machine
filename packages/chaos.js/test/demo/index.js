@@ -1,8 +1,7 @@
 import fs         from 'fs'
 import path       from 'path'
+import Web3       from 'web3'
 import contractor from 'truffle-contract'
-import Web3 from 'web3'
-
 import { Client, Machine } from '../../lib/'
 import { token_1, token_2, token_3, token_4, token_5, token_6, token_7 } from './data'
 
