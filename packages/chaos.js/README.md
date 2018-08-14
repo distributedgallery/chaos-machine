@@ -10,7 +10,7 @@ npm install --save @chaosmachine/chaos.js
 
 ## API
 
-See the [`test`](test) directory to have a look at the API
+Coming soon
 
 ## License
 
