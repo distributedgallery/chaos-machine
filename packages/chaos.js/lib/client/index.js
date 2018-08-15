@@ -9,7 +9,7 @@ const url_parse_1 = __importDefault(require("url-parse"));
 const web3_1 = __importDefault(require("web3"));
 const track_1 = __importDefault(require("./track"));
 const DEFAULTS = {
-    ADDRESS: '0x7e8dcb7432b8356635f2820b8e92fa6d760609fe',
+    ADDRESS: '0xcdf45df24d878dd7e564a72802ba23031acfac07',
     IPFS: 'https://ipfs.infura.io:5001',
     PROVIDER: new web3_1.default.providers.HttpProvider('http://localhost:8545')
 };

@@ -25,17 +25,20 @@ const fs_1 = __importDefault(require("./fs"));
 const log_1 = __importDefault(require("./log"));
 const token_1 = __importDefault(require("./token"));
 const track_1 = __importDefault(require("./track"));
-let Lcd;
+let ILCD;
+let IRelay;
 (async () => {
     if (os_1.default.type() === 'Linux') {
-        Lcd = await Promise.resolve().then(() => __importStar(require('./devices/lcd')));
+        ILCD = await Promise.resolve().then(() => __importStar(require('./devices/lcd')));
+        IRelay = await Promise.resolve().then(() => __importStar(require('./devices/relay')));
     }
     else {
-        Lcd = await Promise.resolve().then(() => __importStar(require('./devices/lcd-spoof')));
+        ILCD = await Promise.resolve().then(() => __importStar(require('./devices/lcd-spoof')));
+        IRelay = await Promise.resolve().then(() => __importStar(require('./devices/relay-spoof')));
     }
 })();
 const DEFAULTS = {
-    ADDRESS: '0x7e8dcb7432b8356635f2820b8e92fa6d760609fe',
+    ADDRESS: '0xcdf45df24d878dd7e564a72802ba23031acfac07',
     DEVICES: false,
     ETHEREUM: 'https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09',
     IPFS: 'https://ipfs.infura.io:5001',
@@ -94,18 +97,56 @@ class Machine {
         if (devices) {
             this.cash = new cash_1.default({ port: '/dev/cash' });
             this.printer = new printer_1.default({ port: '/dev/printer' });
-            this.lcd = new Lcd({ rs: 25, e: 24, data: [23, 17, 27, 22] });
-            // this.fans 		= new Relay({ pin: 4 })
-            // this.resistor = new Relay({ pin: 3 })
-            this.cash.on('ready', () => this.log.info('[cash][ready]'));
-            this.printer.on('ready', () => this.log.info('[printer][ready]'));
+            this.lcd = new ILCD({ rs: 25, e: 24, data: [23, 17, 27, 22] });
+            this.fans = new IRelay({ pin: 4 });
+            this.resistor = new IRelay({ pin: 3 });
+            // initialization
+            this.cash.on('ready', () => this.log.info('[cash:ready]'));
+            this.printer.on('ready', () => {
+                this.log.info('[printer:ready]');
+                this.printer.print('https://www.distributedgallery.com');
+            });
             this.lcd.on('ready', () => {
-                this.log.info('[lcd][ready]');
-                this.lcd.write('Welcome chaos', (err) => {
-                    this.log.error(err.toString());
+                this.log.info('[lcd:ready]');
+                this.lcd.write('WELCOME CHAOS', (err) => {
+                    if (err) {
+                        this.log.error(err.toString());
+                    }
                 });
             });
-            // exist process nicely
+            // event handling
+            this.printer.on('done', (data) => this.log.info('[printed:' + data + ']'));
+            this.cash.on('accepted', () => {
+                this.lcd.write('BURNING BILL', (err) => {
+                    if (err) {
+                        this.log.error(err.toString());
+                    }
+                });
+                this.resistor.turnOn();
+                setTimeout(() => {
+                    this.resistor.turnOff();
+                    this.fans.turnOn();
+                    setTimeout(() => this.fans.turnOff(), 10000);
+                    const token = this.token.generate();
+                    this.printer.print('https://chaos.distributedgallery.com/upload/' + token.privateKey);
+                    this.lcd.write('TAKE YOUR TICKET', (err) => {
+                        if (err) {
+                            this.log.error(err.toString());
+                        }
+                    });
+                    setTimeout(() => {
+                        this.lcd.write('WELCOME CHAOS', (err) => {
+                            if (err) {
+                                this.log.error(err.toString());
+                            }
+                        });
+                    }, 10000);
+                    this.token.register(token.address).catch((err) => {
+                        this.log.error(err.toString());
+                    });
+                }, 15000);
+            });
+            // exit process nicely
             process.on('SIGINT', () => process.exit(0));
             process.on('uncaughtException', (err) => {
                 this.log.error(err.toString());

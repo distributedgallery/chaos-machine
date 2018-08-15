@@ -16,12 +16,15 @@ import Log from './log'
 import Token from './token'
 import Track from './track'
 
-let Lcd
+let ILCD
+let IRelay
 (async () => {
   if (os.type() === 'Linux') {
-    Lcd = await import('./devices/lcd')
+    ILCD = await import('./devices/lcd')
+    IRelay = await import('./devices/relay')
   } else {
-    Lcd = await import('./devices/lcd-spoof')
+    ILCD = await import('./devices/lcd-spoof')
+    IRelay = await import('./devices/relay-spoof')
   }
 })()
 
@@ -115,24 +118,54 @@ export default class Machine {
     this.track = new Track(this)
     this.audio = new Audio(this)
     this.token = new Token(this)
+
     // devices
     if (devices) {
       this.cash = new Cash({ port: '/dev/cash' })
       this.printer = new Printer({ port: '/dev/printer' })
-      this.lcd = new Lcd({ rs: 25, e: 24, data: [23, 17, 27, 22] })
-      // this.fans 		= new Relay({ pin: 4 })
-      // this.resistor = new Relay({ pin: 3 })
-
-      this.cash!.on('ready', () => this.log.info('[cash][ready]'))
-      this.printer!.on('ready', () => this.log.info('[printer][ready]'))
+      this.lcd = new ILCD({ rs: 25, e: 24, data: [23, 17, 27, 22] })
+      this.fans = new IRelay({ pin: 4 })
+      this.resistor = new IRelay({ pin: 3 })
+      // initialization
+      this.cash!.on('ready', () => this.log.info('[cash:ready]'))
+      this.printer!.on('ready', () => {
+        this.log.info('[printer:ready]')
+        this.printer!.print('https://www.distributedgallery.com')
+      })
       this.lcd!.on('ready', () => {
-        this.log.info('[lcd][ready]')
-        this.lcd!.write('Welcome chaos', (err) => {
-          this.log.error(err.toString())
+        this.log.info('[lcd:ready]')
+        this.lcd!.write('WELCOME CHAOS', (err) => {
+          if (err) { this.log.error(err.toString()) }
         })
       })
+      // event handling
+      this.printer!.on('done', (data) => this.log.info('[printed:' + data + ']'))
+      this.cash!.on('accepted', () => {
+        this.lcd!.write('BURNING BILL', (err) => {
+          if (err) { this.log.error(err.toString()) }
+        })
+        this.resistor!.turnOn()
+        setTimeout(() => {
+          this.resistor!.turnOff()
+          this.fans!.turnOn()
+          setTimeout(() => this.fans!.turnOff(), 10000)
+          const token = this.token.generate()
+          this.printer!.print('https://chaos.distributedgallery.com/upload/' + token.privateKey)
+          this.lcd!.write('TAKE YOUR TICKET', (err) => {
+            if (err) { this.log.error(err.toString()) }
+          })
+          setTimeout(() => {
+            this.lcd!.write('WELCOME CHAOS', (err) => {
+              if (err) { this.log.error(err.toString()) }
+            })
+          }, 10000)
+          this.token.register(token.address).catch((err) => {
+            this.log.error(err.toString())
+          })
+        }, 15000)
+      })
 
-      // exist process nicely
+      // exit process nicely
       process.on('SIGINT', () => process.exit(0))
       process.on('uncaughtException', (err) => {
         this.log.error(err.toString())
