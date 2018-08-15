@@ -4,7 +4,7 @@ const { assertRevert } = require('./helpers/assertRevert')
 const expectEvent = require('./helpers/expectEvent')
 
 contract('Chaos', function(accounts) {
-  let app, chaos
+  let chaos
 
   const admin = accounts[0]
   const user_1 = accounts[1]
