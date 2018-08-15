@@ -5,7 +5,7 @@ import Web3 from 'web3'
 import Track from './track'
 
 const DEFAULTS = {
-  ADDRESS: '0x70426066c3b2313529714013406bd2956d869725',
+  ADDRESS: '0xcdf45df24d878dd7e564a72802ba23031acfac07',
   IPFS: 'https://ipfs.infura.io:5001',
   PROVIDER: new Web3.providers.HttpProvider('http://localhost:8545')
 }

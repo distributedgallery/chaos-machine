@@ -1,6 +1,4 @@
 'use strict'
-const HDWalletProvider = require("truffle-hdwallet-provider");
-
 
 module.exports = {
   networks: {
@@ -11,10 +9,8 @@ module.exports = {
       network_id: '*'
     },
     mainnet: {
-      provider: function() {
-        const mnemonic = require('./mnemonic.js')
-        return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09")
-      },
+      host: 'localhost',
+      port: 8545,
       network_id: 1,
       gasPrice: 8000000000
     }

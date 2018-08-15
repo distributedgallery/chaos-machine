@@ -26,7 +26,7 @@ let Lcd
 })()
 
 const DEFAULTS = {
-  ADDRESS: '0x70426066c3b2313529714013406bd2956d869725',
+  ADDRESS: '0xcdf45df24d878dd7e564a72802ba23031acfac07',
   DEVICES: false,
   ETHEREUM: 'https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09',
   IPFS: 'https://ipfs.infura.io:5001',
