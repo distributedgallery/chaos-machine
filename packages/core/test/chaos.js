@@ -145,9 +145,7 @@ contract('Chaos', function(accounts) {
 
         before(async () => {
           chaos = await Chaos.new({ from: admin })
-
           await chaos.grantMachine(machine_1, { from: admin })
-
           token = EthCrypto.createIdentity()
         })
 
@@ -164,23 +162,18 @@ contract('Chaos', function(accounts) {
       })
 
       context(
-        "when not called from an authorized 'machine' account, it",
-        () => {
+        "when not called from an authorized 'machine' account, it", () => {
           let token
 
           before(async () => {
             chaos = await Chaos.new({ from: admin })
-
             await chaos.grantMachine(machine_1, { from: admin })
-
             token = EthCrypto.createIdentity()
           })
 
           it('should revert', async () => {
             await assertRevert(chaos.grantToken(token.address, { from: admin }))
-            await assertRevert(
-              chaos.grantToken(token.address, { from: unauthorized })
-            )
+            await assertRevert(chaos.grantToken(token.address, { from: unauthorized }))
             assert.equal(await chaos.hasRole(token.address, 'token'), false)
           })
         }
@@ -220,12 +213,8 @@ contract('Chaos', function(accounts) {
         })
 
         it('should revert', async () => {
-          await assertRevert(
-            chaos.revokeToken(token.address, { from: machine_1 })
-          )
-          await assertRevert(
-            chaos.revokeToken(token.address, { from: unauthorized })
-          )
+          await assertRevert(chaos.revokeToken(token.address, { from: machine_1 }))
+          await assertRevert(chaos.revokeToken(token.address, { from: unauthorized }))
           assert.equal(await chaos.hasRole(token.address, 'token'), true)
         })
       })
@@ -239,11 +228,8 @@ contract('Chaos', function(accounts) {
 
         before(async () => {
           chaos = await Chaos.new({ from: admin })
-
           await chaos.grantMachine(machine_1, { from: admin })
-
           token = EthCrypto.createIdentity()
-
           await chaos.grantToken(token.address, { from: machine_1 })
         })
 
@@ -252,10 +238,8 @@ contract('Chaos', function(accounts) {
           const hash = EthCrypto.hash.keccak256(message)
           const signature = EthCrypto.sign(token.privateKey, hash)
 
-          receipt = await chaos.addTrack(hash, signature, 'QmAwesomeHash', {
-            from: user_1
-          })
-          let track = await chaos.tracks(0)
+          receipt = await chaos.addTrack(hash, signature, 'QmAwesomeHash', { from: user_1 })
+          const track = await chaos.tracks(0)
           assert.equal(track[0], user_1)
           assert.equal(track[1], 'QmAwesomeHash')
         })
@@ -282,11 +266,7 @@ contract('Chaos', function(accounts) {
           const hash = EthCrypto.hash.keccak256(message)
           const signature = EthCrypto.sign(fake.privateKey, hash)
 
-          await assertRevert(
-            chaos.addTrack(hash, signature, 'QmAwesomeHash', {
-              from: user_1
-            })
-          )
+          await assertRevert(chaos.addTrack(hash, signature, 'QmAwesomeHash', { from: user_1 }))
         })
       })
     })
@@ -314,12 +294,8 @@ contract('Chaos', function(accounts) {
           const hash_2 = EthCrypto.hash.keccak256(message_2)
           const signature_2 = EthCrypto.sign(token_2.privateKey, hash_2)
 
-          await chaos.addTrack(hash_1, signature_1, 'QmAwesomeHash_1', {
-            from: user_1
-          })
-          await chaos.addTrack(hash_2, signature_2, 'QmAwesomeHash_2', {
-            from: user_2
-          })
+          await chaos.addTrack(hash_1, signature_1, 'QmAwesomeHash_1', { from: user_1 })
+          await chaos.addTrack(hash_2, signature_2, 'QmAwesomeHash_2', { from: user_2 })
         })
 
         it('should remove track correctly', async () => {
@@ -357,12 +333,8 @@ contract('Chaos', function(accounts) {
           const hash_2 = EthCrypto.hash.keccak256(message_2)
           const signature_2 = EthCrypto.sign(token_2.privateKey, hash_2)
 
-          await chaos.addTrack(hash_1, signature_1, 'QmAwesomeHash_1', {
-            from: user_1
-          })
-          await chaos.addTrack(hash_2, signature_2, 'QmAwesomeHash_2', {
-            from: user_2
-          })
+          await chaos.addTrack(hash_1, signature_1, 'QmAwesomeHash_1', { from: user_1 })
+          await chaos.addTrack(hash_2, signature_2, 'QmAwesomeHash_2', { from: user_1 })
         })
 
         it('should revert', async () => {
@@ -420,24 +392,12 @@ contract('Chaos', function(accounts) {
         const hash_6 = EthCrypto.hash.keccak256(message_6)
         const signature_6 = EthCrypto.sign(token_6.privateKey, hash_6)
 
-        await chaos.addTrack(hash_1, signature_1, 'QmAwesomeHash_1', {
-          from: user_1
-        })
-        await chaos.addTrack(hash_2, signature_2, 'QmAwesomeHash_2', {
-          from: user_2
-        })
-        await chaos.addTrack(hash_3, signature_3, 'QmAwesomeHash_3', {
-          from: user_1
-        })
-        await chaos.addTrack(hash_4, signature_4, 'QmAwesomeHash_4', {
-          from: user_2
-        })
-        await chaos.addTrack(hash_5, signature_5, 'QmAwesomeHash_5', {
-          from: user_1
-        })
-        await chaos.addTrack(hash_6, signature_6, 'QmAwesomeHash_6', {
-          from: user_2
-        })
+        await chaos.addTrack(hash_1, signature_1, 'QmAwesomeHash_1', { from: user_1 })
+        await chaos.addTrack(hash_2, signature_2, 'QmAwesomeHash_2', { from: user_2 })
+        await chaos.addTrack(hash_3, signature_3, 'QmAwesomeHash_3', { from: user_1 })
+        await chaos.addTrack(hash_4, signature_4, 'QmAwesomeHash_4', { from: user_2 })
+        await chaos.addTrack(hash_5, signature_5, 'QmAwesomeHash_5', { from: user_1 })
+        await chaos.addTrack(hash_6, signature_6, 'QmAwesomeHash_6', { from: user_2 })
       })
 
       it('should return a random track cid', async () => {
