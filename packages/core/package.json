@@ -33,7 +33,6 @@
     "eth-crypto": "^1.2.3",
     "openzeppelin-solidity": "1.11.0",
     "solium": "^1.1.8",
-    "truffle": "^4.1.13",
-    "truffle-hdwallet-provider": "0.0.6"
+    "truffle": "^4.1.13"
   }
 }
