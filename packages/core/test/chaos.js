@@ -1,6 +1,5 @@
 const Chaos = artifacts.require('Chaos')
 const EthCrypto = require('eth-crypto')
-const { TestApp } = require('zos')
 const { assertRevert } = require('./helpers/assertRevert')
 const expectEvent = require('./helpers/expectEvent')
 
@@ -15,14 +14,9 @@ contract('Chaos', function(accounts) {
   const machine_2 = accounts[9]
 
   context('Initialization', () => {
-    before(async () => {
-      app = await TestApp(null, { from: admin })
-      chaos = await app.createProxy(Chaos)
-    })
-
-    context('#initialize', () => {
-      it('should initialize contract correctly', async () => {
-        await chaos.initialize({ from: admin })
+    context('#constructor', () => {
+      it('should deploy contract correctly', async () => {
+        chaos = await Chaos.new({ from: admin })
       })
 
       it("should grant 'admin' role to initializer address", async () => {
@@ -35,10 +29,6 @@ contract('Chaos', function(accounts) {
         assert.equal(await chaos.hasRole(machine_2, 'machine'), false)
         assert.equal(await chaos.hasRole(user_1, 'token'), false)
       })
-
-      it('should revert when called more than once', async () => {
-        await assertRevert(chaos.initialize({ from: admin }))
-      })
     })
   })
 
@@ -48,9 +38,7 @@ contract('Chaos', function(accounts) {
         let receipt
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
         })
 
         it("should update 'admin' role correctly", async () => {
@@ -68,9 +56,7 @@ contract('Chaos', function(accounts) {
 
       context("when not called from an 'admin' account, it", () => {
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
         })
 
         it('should revert', async () => {
@@ -88,9 +74,7 @@ contract('Chaos', function(accounts) {
         let receipt
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
         })
 
         it("should grant 'machine' role correctly", async () => {
@@ -106,9 +90,7 @@ contract('Chaos', function(accounts) {
 
       context("when not called from an 'admin' account, it", () => {
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
         })
 
         it('should revert', async () => {
@@ -125,9 +107,7 @@ contract('Chaos', function(accounts) {
         let receipt
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
         })
 
@@ -144,9 +124,7 @@ contract('Chaos', function(accounts) {
 
       context("when not called from an 'admin' account, it", () => {
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
         })
 
@@ -166,10 +144,8 @@ contract('Chaos', function(accounts) {
         let receipt, token
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
+          chaos = await Chaos.new({ from: admin })
 
-          await chaos.initialize({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
 
           token = EthCrypto.createIdentity()
@@ -193,10 +169,8 @@ contract('Chaos', function(accounts) {
           let token
 
           before(async () => {
-            app = await TestApp(null, { from: admin })
-            chaos = await app.createProxy(Chaos)
+            chaos = await Chaos.new({ from: admin })
 
-            await chaos.initialize({ from: admin })
             await chaos.grantMachine(machine_1, { from: admin })
 
             token = EthCrypto.createIdentity()
@@ -218,14 +192,9 @@ contract('Chaos', function(accounts) {
         let receipt, token
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
-
           token = EthCrypto.createIdentity()
-
           await chaos.grantToken(token.address, { from: machine_1 })
         })
 
@@ -244,14 +213,9 @@ contract('Chaos', function(accounts) {
         let token
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
-
           token = EthCrypto.createIdentity()
-
           await chaos.grantToken(token.address, { from: machine_1 })
         })
 
@@ -274,10 +238,8 @@ contract('Chaos', function(accounts) {
         let receipt, token
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
+          chaos = await Chaos.new({ from: admin })
 
-          await chaos.initialize({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
 
           token = EthCrypto.createIdentity()
@@ -311,10 +273,7 @@ contract('Chaos', function(accounts) {
 
       context('when not called with an authorized token, it', () => {
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
-
-          await chaos.initialize({ from: admin })
+          chaos = await Chaos.new({ from: admin })
         })
 
         it('should revert', async () => {
@@ -337,10 +296,8 @@ contract('Chaos', function(accounts) {
         let receipt, token_1, token_2
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
+          chaos = await Chaos.new({ from: admin })
 
-          await chaos.initialize({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
 
           token_1 = EthCrypto.createIdentity()
@@ -382,10 +339,8 @@ contract('Chaos', function(accounts) {
         let token_1, token_2
 
         before(async () => {
-          app = await TestApp(null, { from: admin })
-          chaos = await app.createProxy(Chaos)
+          chaos = await Chaos.new({ from: admin })
 
-          await chaos.initialize({ from: admin })
           await chaos.grantMachine(machine_1, { from: admin })
 
           token_1 = EthCrypto.createIdentity()
@@ -423,10 +378,8 @@ contract('Chaos', function(accounts) {
       let token_1, token_2, token_3, token_4, token_5, token_6
 
       before(async () => {
-        app = await TestApp(null, { from: admin })
-        chaos = await app.createProxy(Chaos)
+        chaos = await Chaos.new({ from: admin })
 
-        await chaos.initialize({ from: admin })
         await chaos.grantMachine(machine_1, { from: admin })
 
         token_1 = EthCrypto.createIdentity()

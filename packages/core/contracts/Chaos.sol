@@ -1,10 +1,9 @@
 pragma solidity ^0.4.21;
-import "zos-lib/contracts/migrations/Migratable.sol";
 import "openzeppelin-solidity/contracts/ECRecovery.sol";
 import "openzeppelin-solidity/contracts/ownership/rbac/RBAC.sol";
 
 
-contract Chaos is Migratable, RBAC {
+contract Chaos is RBAC {
   using ECRecovery for bytes32;
 
   struct Track {
@@ -40,9 +39,9 @@ contract Chaos is Migratable, RBAC {
     _;
   }
 
-  function initialize() public isInitializer("Chaos", "0") {
-    addRole(msg.sender, ROLE_ADMIN);
-  }
+  constructor() public {
+		addRole(msg.sender, ROLE_ADMIN);
+	}
 
   function updateAdmin(address _new) public onlyAdmin {
     _updateAdmin(msg.sender, _new);

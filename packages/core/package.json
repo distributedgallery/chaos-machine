@@ -18,7 +18,9 @@
   "scripts": {
     "compile": "./node_modules/.bin/truffle compile",
     "lint": "./node_modules/.bin/solium --dir ./contracts",
-    "test": "NODE_ENV=test ./node_modules/.bin/truffle test --network local"
+    "test": "./node_modules/.bin/truffle test --network local",
+    "migrate": "./node_modules/.bin/truffle migrate --network local",
+    "migrate:mainnet": "./node_modules/.bin/truffle migrate --network mainnet"
   },
   "files": [
     "build/",
@@ -32,6 +34,6 @@
     "openzeppelin-solidity": "1.11.0",
     "solium": "^1.1.8",
     "truffle": "^4.1.13",
-    "zos": "^1.1.0"
+    "truffle-hdwallet-provider": "0.0.6"
   }
 }
