@@ -1,6 +1,6 @@
 {
   "name": "@chaosmachine/core",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Solidity smart contracts for the Chaos Machine",
   "keywords": [
     "ethereum",
