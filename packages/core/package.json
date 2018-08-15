@@ -30,6 +30,7 @@
     "test/"
   ],
   "devDependencies": {
+    "chai": "^4.1.2",
     "eth-crypto": "^1.2.3",
     "openzeppelin-solidity": "1.11.0",
     "solium": "^1.1.8",
