@@ -26,7 +26,6 @@ describe('ChaosMachine', () => {
     ChaosContract.defaults({ gas: 0xffffff })
 
     contract = await ChaosContract.new({ from: addr_admin, gas: 0xffffff })
-    await contract.initialize({ from: addr_admin, gas: 0xffffffff })
     await contract.grantMachine(addr_machine, { from: addr_admin })
   })
 
@@ -45,7 +44,7 @@ describe('ChaosMachine', () => {
         client_2.provider.host.should.equal('https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09')
         client_1.abstraction.currentProvider.host.should.equal('http://localhost:8545')
         client_2.abstraction.currentProvider.host.should.equal('https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09')
-        client_1.contract.address.should.equal('0x7e8dcb7432b8356635f2820b8e92fa6d760609fe')
+        client_1.contract.address.should.equal('0xcdf45df24d878dd7e564a72802ba23031acfac07')
         client_2.contract.address.should.equal(contract.address)
         client_1.track.client.should.deep.equal(client_1)
         client_2.track.client.should.deep.equal(client_2)
@@ -96,7 +95,7 @@ describe('ChaosMachine', () => {
         machine_2.provider.engine._providers[2].provider.host.should.equal('http://localhost:8545')
         machine_1.abstraction.currentProvider.engine._providers[2].provider.host.should.equal('https://mainnet.infura.io/v3/ab05225130e846b28dc1bb71d6d96f09')
         machine_2.abstraction.currentProvider.engine._providers[2].provider.host.should.equal('http://localhost:8545')
-        machine_1.contract.address.should.equal('0x7e8dcb7432b8356635f2820b8e92fa6d760609fe')
+        machine_1.contract.address.should.equal('0xcdf45df24d878dd7e564a72802ba23031acfac07')
         machine_2.contract.address.should.equal(contract.address)
         machine_1.paths.root.should.equal(path.join(os.homedir(), '.chaos'))
         machine_2.paths.root.should.equal(path.join(os.homedir(), '.chaos'))

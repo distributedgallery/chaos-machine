@@ -26,7 +26,6 @@ const main = async () => {
   ChaosContract.setProvider(web3.currentProvider)
 
   const contract = await ChaosContract.new({ from: addr_admin, gas: 0xffffffff })
-  await contract.initialize({ from: addr_admin, gas: 0xffffffff })
   await contract.grantMachine(addr_machine, { from: addr_admin })
 
   const chaos   = new Client({ address: contract.address })
