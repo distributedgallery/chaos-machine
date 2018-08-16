@@ -17,9 +17,10 @@ export default class Track {
   }
 
   public async download(hash: string) {
-    this.machine.log.info('[downloading:' + hash + ']')
+    this.machine.log.info('Downloading', { hash: hash })
     const buffer = await this.machine.ipfs.files.cat(hash)
     this.machine.fs.write(this.path(hash), buffer)
-    this.machine.log.info('[downloaded:' + hash + ']')
+    this.machine.log.info('Downloaded', { hash: hash })
+
   }
 }

@@ -39,6 +39,8 @@
   "dependencies": {
     "@chaosmachine/core": "^2.0.2",
     "@xavier.seignard/ssp": "^0.1.7",
+    "chalk": "^2.4.1",
+    "columnify": "^1.5.4",
     "esm": "^3.0.74",
     "eth-crypto": "^1.2.3",
     "ipfs-api": "^23.0.0",

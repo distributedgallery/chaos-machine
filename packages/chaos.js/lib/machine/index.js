@@ -62,7 +62,7 @@ class Machine {
                 machine.log.error(err);
             }
             else {
-                machine.log.info('[event:TokenGranted][machine:' + result.args.machine + '][token:' + result.args.token + ']');
+                machine.log.info('Token granted', { machine: result.args.machine, token: result.args.token });
                 machine.audio.shuffle();
             }
         });
@@ -101,13 +101,13 @@ class Machine {
             this.fans = new IRelay({ pin: 4 });
             this.resistor = new IRelay({ pin: 3 });
             // initialization
-            this.cash.on('ready', () => this.log.info('[cash:ready]'));
+            this.cash.on('ready', () => this.log.info('Cash ready'));
             this.printer.on('ready', () => {
-                this.log.info('[printer:ready]');
+                this.log.info('Printer ready');
                 this.printer.print('https://www.distributedgallery.com');
             });
             this.lcd.on('ready', () => {
-                this.log.info('[lcd:ready]');
+                this.log.info('LCD ready');
                 this.lcd.write('WELCOME CHAOS', (err) => {
                     if (err) {
                         this.log.error(err.toString());
@@ -115,7 +115,7 @@ class Machine {
                 });
             });
             // event handling
-            this.printer.on('done', (data) => this.log.info('[printed:' + data + ']'));
+            this.printer.on('done', (data) => this.log.info('Printed'));
             this.cash.on('accepted', () => {
                 this.lcd.write('BURNING BILL', (err) => {
                     if (err) {

@@ -11,7 +11,7 @@ class Audio {
     }
     async shuffle() {
         const hash = await this.machine.contract.shuffle();
-        this.machine.log.info('[shuffling:' + hash + ']');
+        this.machine.log.info('Shuffling', { track: hash });
         this.play(hash);
         return hash;
     }
@@ -22,7 +22,7 @@ class Audio {
         if (this.player.process) {
             process.kill(this.player.process.pid);
         }
-        this.machine.log.info('[playing:' + hash + ']');
+        this.machine.log.info('Playing', { track: hash });
         this.player.play({ player: 'mpg123', filename: this.machine.track.path(hash) });
     }
 }
