@@ -35,7 +35,7 @@
 		"typescript": "^3.0.1"
 	},
 	"dependencies": {
-		"@chaosmachine/chaos.js": "^2.0.3",
+		"@chaosmachine/chaos.js": "file:../chaos.js",
 		"asciiart-logo": "^0.1.7",
 		"inquirer": "^6.1.0",
 		"jsonfile": "^4.0.0",

@@ -45,8 +45,8 @@ export default class Log {
       dataRaw[0][arg] = arg + '=' + args[arg]
     }
 
-    const line = columnify(data, { showHeaders: false, config: { event: { minWidth: 30 } } })
-    const lineRaw = columnify(dataRaw, { showHeaders: false, config: { event: { minWidth: 30 } } }) + '\n'
+    const line = columnify(data, { showHeaders: false, config: { level: { minWidth: 4 }, event: { minWidth: 30 } } })
+    const lineRaw = columnify(dataRaw, { showHeaders: false, config: { level: { minWidth: 4 }, event: { minWidth: 30 } } }) + '\n'
 
     console.log(line)
     fs.appendFile(this.machine.paths['log'], lineRaw, (err) => {

@@ -16,12 +16,15 @@ class LCD extends events_1.default {
         this.lcd.on('ready', () => this.emit('ready'));
     }
     write(text, cb) {
-        this.lcd.setCursor(0, 0);
-        this.lcd.print(text, err => cb && cb(err));
+        // this.lcd.setCursor(0, 0);
+        this.lcd.clear((err, result) => {
+            this.lcd.print(text, err => cb && cb(err));
+        });
     }
     close() {
-        if (this.lcd)
-            this.lcd.close();
+        if (this.lcd) {
+            this.lcd.clear((err, result) => this.lcd.close());
+        }
     }
 }
 exports.default = LCD;

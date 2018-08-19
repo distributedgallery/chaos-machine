@@ -1,4 +1,5 @@
-import { Gpio } from 'onoff'
+import onoff = require('onoff')
+import Gpio = onoff.Gpio
 
 export default class Relay {
 
@@ -6,7 +7,11 @@ export default class Relay {
 
 	constructor(opts) {
 		if (!opts.pin) throw new Error('[Relay] Please specify a pin!');
-		if (Gpio.accessible) this.gpio = new Gpio(opts.pin, 'out');
+
+		if (Gpio.accessible) {
+			this.gpio = new Gpio(opts.pin, 'out');
+			this.turnOff()
+		}
 		else {
 			this.gpio = {
 				writeSync: value => console.log(`writing: ${value}`),
@@ -16,11 +21,11 @@ export default class Relay {
 	}
 
 	turnOn() {
-		this.gpio.writeSync(1);
+		this.gpio.writeSync(0);
 	}
 
 	turnOff() {
-		this.gpio.writeSync(0);
+		this.gpio.writeSync(1);
 	}
 
 	close() {

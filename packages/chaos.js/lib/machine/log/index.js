@@ -37,8 +37,8 @@ class Log {
         for (const arg in args) {
             dataRaw[0][arg] = arg + '=' + args[arg];
         }
-        const line = columnify_1.default(data, { showHeaders: false, config: { event: { minWidth: 30 } } });
-        const lineRaw = columnify_1.default(dataRaw, { showHeaders: false, config: { event: { minWidth: 30 } } }) + '\n';
+        const line = columnify_1.default(data, { showHeaders: false, config: { level: { minWidth: 4 }, event: { minWidth: 30 } } });
+        const lineRaw = columnify_1.default(dataRaw, { showHeaders: false, config: { level: { minWidth: 4 }, event: { minWidth: 30 } } }) + '\n';
         console.log(line);
         fs_1.default.appendFile(this.machine.paths['log'], lineRaw, (err) => {
             if (err) {

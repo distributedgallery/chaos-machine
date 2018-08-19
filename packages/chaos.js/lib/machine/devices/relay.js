@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const onoff_1 = require("onoff");
+const onoff = require("onoff");
+var Gpio = onoff.Gpio;
 class Relay {
     constructor(opts) {
         if (!opts.pin)
             throw new Error('[Relay] Please specify a pin!');
-        if (onoff_1.Gpio.accessible)
-            this.gpio = new onoff_1.Gpio(opts.pin, 'out');
+        if (Gpio.accessible) {
+            this.gpio = new Gpio(opts.pin, 'out');
+            this.turnOff();
+        }
         else {
             this.gpio = {
                 writeSync: value => console.log(`writing: ${value}`),
@@ -15,13 +18,13 @@ class Relay {
         }
     }
     turnOn() {
-        this.gpio.writeSync(1);
-    }
-    turnOff() {
         this.gpio.writeSync(0);
     }
+    turnOff() {
+        this.gpio.writeSync(1);
+    }
     close() {
-        if (onoff_1.Gpio.accessible)
+        if (Gpio.accessible)
             this.gpio.unexport();
     }
 }

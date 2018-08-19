@@ -20,7 +20,9 @@ const util_1 = __importDefault(require("util"));
 const web3_1 = __importDefault(require("web3"));
 const audio_1 = __importDefault(require("./audio"));
 const cash_1 = __importDefault(require("./devices/cash"));
+const lcd_1 = __importDefault(require("./devices/lcd"));
 const printer_1 = __importDefault(require("./devices/printer"));
+const relay_1 = __importDefault(require("./devices/relay"));
 const fs_1 = __importDefault(require("./fs"));
 const log_1 = __importDefault(require("./log"));
 const token_1 = __importDefault(require("./token"));
@@ -28,6 +30,7 @@ const track_1 = __importDefault(require("./track"));
 let ILCD;
 let IRelay;
 (async () => {
+    console.log(os_1.default.type());
     if (os_1.default.type() === 'Linux') {
         ILCD = await Promise.resolve().then(() => __importStar(require('./devices/lcd')));
         IRelay = await Promise.resolve().then(() => __importStar(require('./devices/relay')));
@@ -44,11 +47,18 @@ const DEFAULTS = {
     IPFS: 'https://ipfs.infura.io:5001',
     MNEMONIC: 'journey nice rather ball theme used uncover gate pond rifle between state'
 };
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 class Machine {
     static async launch(opts) {
+        console.log('Toto');
         const machine = new Machine(opts);
+        console.log('Avant web3');
         const web3 = new web3_1.default(machine.provider);
+        console.log('Après web3');
         const accounts = await util_1.default.promisify(web3.eth.getAccounts)();
+        console.log('Après account');
         if (!machine.fs.exists(machine.paths.root)) {
             machine.fs.mkdir(machine.paths.root);
         }
@@ -57,6 +67,7 @@ class Machine {
         }
         machine.abstraction.defaults({ from: accounts[0] });
         const event = machine.contract.TokenGranted({}, { fromBlock: 'latest', toBlock: 'latest' });
+        console.log('Event');
         event.watch((err, result) => {
             if (err) {
                 machine.log.error(err);
@@ -75,7 +86,9 @@ class Machine {
         // mnemonic
         this.mnemonic = mnemonic;
         // HDWallet provider
+        console.log('avant provider');
         this.provider = new truffle_hdwallet_provider_1.default(mnemonic, ethereum);
+        console.log('après provider');
         // abstraction
         this.abstraction = truffle_contract_1.default(require('@chaosmachine/core/build/contracts/Chaos.json'));
         this.abstraction.setProvider(this.provider);
@@ -95,62 +108,85 @@ class Machine {
         this.token = new token_1.default(this);
         // devices
         if (devices) {
-            this.cash = new cash_1.default({ port: '/dev/cash' });
-            this.printer = new printer_1.default({ port: '/dev/printer' });
-            this.lcd = new ILCD({ rs: 25, e: 24, data: [23, 17, 27, 22] });
-            this.fans = new IRelay({ pin: 4 });
-            this.resistor = new IRelay({ pin: 3 });
-            // initialization
-            this.cash.on('ready', () => this.log.info('Cash ready'));
-            this.printer.on('ready', () => {
-                this.log.info('Printer ready');
-                this.printer.print('https://www.distributedgallery.com');
-            });
-            this.lcd.on('ready', () => {
-                this.log.info('LCD ready');
-                this.lcd.write('WELCOME CHAOS', (err) => {
-                    if (err) {
-                        this.log.error(err.toString());
-                    }
+            try {
+                this.cash = new cash_1.default({ port: '/dev/cash' });
+                this.printer = new printer_1.default({ port: '/dev/printer' });
+                this.lcd = new lcd_1.default({ rs: 25, e: 24, data: [23, 17, 27, 22] });
+                this.fans = new relay_1.default({ pin: 15 });
+                this.fans.turnOn();
+                this.resistor = new relay_1.default({ pin: 14 });
+                // initialization
+                this.cash.on('ready', () => this.log.info('Cash ready'));
+                this.printer.on('ready', () => {
+                    this.log.info('Printer ready');
+                    console.log('On printe printer ready');
+                    this.printer.print('https://www.distributedgallery.com');
                 });
-            });
-            // event handling
-            this.printer.on('done', (data) => this.log.info('Printed'));
-            this.cash.on('accepted', () => {
-                this.lcd.write('BURNING BILL', (err) => {
-                    if (err) {
-                        this.log.error(err.toString());
-                    }
-                });
-                this.resistor.turnOn();
-                setTimeout(() => {
-                    this.resistor.turnOff();
-                    this.fans.turnOn();
-                    setTimeout(() => this.fans.turnOff(), 10000);
-                    const token = this.token.generate();
-                    this.printer.print('https://chaos.distributedgallery.com/upload/' + token.privateKey);
-                    this.lcd.write('TAKE YOUR TICKET', (err) => {
+                // this.fans!.turnOn()
+                this.lcd.on('ready', () => {
+                    this.log.info('LCD ready');
+                    this.lcd.write('HI CHAOS MACHINE', (err) => {
                         if (err) {
                             this.log.error(err.toString());
                         }
                     });
-                    setTimeout(() => {
+                });
+                // event handling
+                // this.printer!.on('done', (data) => this.log.info('Printed'))
+                this.cash.on('accepted', async () => {
+                    try {
+                        this.log.info('Bill burning');
+                        this.lcd.write('BURNING', (err) => {
+                            if (err) {
+                                this.log.error(err.toString());
+                            }
+                        });
+                        this.cash.ssp.disable();
+                        this.resistor.turnOn();
+                        await timeout(20000);
+                        this.resistor.turnOff();
+                        await timeout(5000);
+                        this.resistor.turnOn();
+                        await timeout(10000);
+                        this.resistor.turnOff();
+                        // await timeout(4000)
+                        // this.resistor!.turnOn()
+                        // await timeout(5000)
+                        // this.resistor!.turnOff()
+                        const token = this.token.generate();
+                        this.log.info('Generating token', { token: token.address });
+                        this.printer.printShort('https://chaos.distributedgallery.com/upload/' + token.privateKey);
+                        this.lcd.write('TAKE YOUR TICKET', (err) => {
+                            if (err) {
+                                this.log.error(err.toString());
+                            }
+                        });
+                        this.log.info('Registering token', { token: token.address });
+                        await this.token.register(token.address);
+                        this.log.info('Token registered', { token: token.address });
                         this.lcd.write('WELCOME CHAOS', (err) => {
                             if (err) {
                                 this.log.error(err.toString());
                             }
                         });
-                    }, 10000);
-                    this.token.register(token.address).catch((err) => {
+                        this.cash.ssp.enable();
+                    }
+                    catch (err) {
                         this.log.error(err.toString());
-                    });
-                }, 15000);
-            });
+                    }
+                });
+            }
+            catch (err) {
+                this.log.error(err.toString());
+            }
             // exit process nicely
             process.on('SIGINT', () => process.exit(0));
             process.on('uncaughtException', (err) => {
                 this.log.error(err.toString());
-                setTimeout(() => { process.exit(1); }, 500);
+            });
+            process.on('unhandledRejection', (reason, p) => {
+                // console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+                this.log.error(reason);
             });
             process.on('exit', () => {
                 this.cash.close();

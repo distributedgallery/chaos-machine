@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sound_player_1 = __importDefault(require("sound-player"));
+const process_exists_1 = __importDefault(require("process-exists"));
 class Audio {
     constructor(machine) {
         this.machine = machine;
@@ -19,7 +20,7 @@ class Audio {
         if (!this.machine.track.exists(hash)) {
             await this.machine.track.download(hash);
         }
-        if (this.player.process) {
+        if (typeof this.player.process !== 'undefined' && await process_exists_1.default(this.player.process.pid)) {
             process.kill(this.player.process.pid);
         }
         this.machine.log.info('Playing', { track: hash });
