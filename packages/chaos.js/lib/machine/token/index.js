@@ -12,8 +12,10 @@ class Token {
         return eth_crypto_1.default.createIdentity();
     }
     async register(address, opts) {
+        const gasPrice = this.machine.web3.eth.gasPrice;
         const estimate = await this.machine.contract.grantToken.estimateGas(address);
-        const receipt = await this.machine.contract.grantToken(address, Object.assign({ gas: 2 * estimate }, opts));
+        this.machine.log.info('Submitting grantToken transaction', { gas: estimate, gasPrice: 2 * gasPrice.toNumber() });
+        const receipt = await this.machine.contract.grantToken(address, Object.assign({ gas: 2 * estimate, gasPrice: 2 * gasPrice.toNumber() }, opts));
         return receipt;
     }
 }

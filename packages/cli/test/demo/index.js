@@ -17,25 +17,26 @@ const tracks = [
 
 const main = async () => {
   const ChaosContract = contractor(require('@chaosmachine/core/build/contracts/Chaos.json'))
-  const web3          = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
-  const accounts      = web3.eth.accounts
-  const addr_machine  = accounts[0]
-  const addr_admin    = accounts[1]
+  // const web3          = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"))
+  // const accounts      = web3.eth.accounts
+  // const addr_machine  = accounts[0]
+  // const addr_admin    = accounts[1]
 
   const address = fs.readFileSync(path.join('test', 'demo', 'address.txt'), 'utf8')
 
   ChaosContract.setProvider(web3.currentProvider)
 
-  const contract = await ChaosContract.at(address)
+  // const contract = await ChaosContract.at(address)
 
-  await contract.grantMachine(addr_machine, { from: addr_admin })
+  // await contract.grantMachine(addr_machine, { from: addr_admin })
 
-  const machine = await Machine.launch({ ethereum: 'http://localhost:8545', address: contract.address })
+  // const machine = await Machine.launch({ ethereum: 'http://localhost:8545', address: contract.address })
+  const machine = await Machine.launch()
 
   await machine.token.register(token_4.address)
-  await timeout(10000)
+  await timeout(50000)
   await machine.token.register(token_5.address)
-  await timeout(10000)
+  await timeout(50000)
   await machine.token.register(token_6.address)
 }
 

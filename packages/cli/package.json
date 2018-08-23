@@ -24,7 +24,8 @@
 		"build": "node_modules/.bin/parcel build src/index.ts --target node -d lib -o chaos && node scripts/shebang.js",
 		"lint": "./node_modules/.bin/tslint --fix src/**/*.ts{,x}",
 		"test:deploy": "node -r esm test/demo/deploy.js",
-		"test:demo": "node -r esm test/demo/index.js"
+		"test:demo": "node -r esm test/demo/index.js",
+		"test:mainnet": "node -r esm test/demo/mainnet.js"
 	},
 	"devDependencies": {
 		"@chaosmachine/core": "^2.0.2",

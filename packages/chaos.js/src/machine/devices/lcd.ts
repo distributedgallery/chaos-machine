@@ -1,4 +1,3 @@
-// const Lcd = require('lcd')
 import Lcd from 'lcd'
 import EventEmitter from 'events'
 import os from 'os'
@@ -11,7 +10,7 @@ export default class LCD extends EventEmitter {
 		super();
 
 		if (!opts.rs || !opts.e || !opts.data || opts.data.length !== 4) {
-			throw new Error('[Lcd] Please specifiy the correct pins!');
+			throw new Error('[Lcd] Please specifiy the correct pins');
 
 		}
 		this.lcd = new Lcd(opts);

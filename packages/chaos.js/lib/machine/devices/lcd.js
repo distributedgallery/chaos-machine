@@ -3,14 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// const Lcd = require('lcd')
 const lcd_1 = __importDefault(require("lcd"));
 const events_1 = __importDefault(require("events"));
 class LCD extends events_1.default {
     constructor(opts) {
         super();
         if (!opts.rs || !opts.e || !opts.data || opts.data.length !== 4) {
-            throw new Error('[Lcd] Please specifiy the correct pins!');
+            throw new Error('[Lcd] Please specifiy the correct pins');
         }
         this.lcd = new lcd_1.default(opts);
         this.lcd.on('ready', () => this.emit('ready'));
