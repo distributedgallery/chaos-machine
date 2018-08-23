@@ -11,38 +11,44 @@ class Log {
         this.machine = machine;
     }
     info(event, args) {
-        const data = [{ level: chalk_1.default.green('INFO'), timestamp: '[' + new Date(Date.now()).toISOString() + ']', event: event }];
-        const dataRaw = [{ level: 'INFO', timestamp: '[' + new Date(Date.now()).toISOString() + ']', event: event }];
+        const data = [{ level: chalk_1.default.green('INFO'), timestamp: '[' + new Date(Date.now()).toISOString() + ']', event }];
+        const dataRaw = [{ level: 'INFO', timestamp: '[' + new Date(Date.now()).toISOString() + ']', event }];
+        /* tslint:disable:forin */
         for (const arg in args) {
             data[0][arg] = chalk_1.default.green(arg) + '=' + args[arg];
-        }
-        for (const arg in args) {
             dataRaw[0][arg] = arg + '=' + args[arg];
         }
+        /* tslint:enable:forin */
         const line = columnify_1.default(data, { showHeaders: false, config: { event: { minWidth: 30 } } });
         const lineRaw = columnify_1.default(dataRaw, { showHeaders: false, config: { event: { minWidth: 30 } } }) + '\n';
+        /* tslint:disable:no-console */
         console.log(line);
-        fs_1.default.appendFile(this.machine.paths['log'], lineRaw, (err) => {
+        /* tslint:enable:no-console */
+        fs_1.default.appendFile(this.machine.paths.log, lineRaw, (err) => {
             if (err) {
                 this.error('Log', { error: err });
             }
         });
     }
     error(event, args) {
-        const data = [{ level: chalk_1.default.red('ERR'), timestamp: '[' + new Date(Date.now()).toISOString() + ']', event: event }];
-        const dataRaw = [{ level: 'ERR', timestamp: '[' + new Date(Date.now()).toISOString() + ']', event: event }];
+        const data = [{ level: chalk_1.default.red('ERR'), timestamp: '[' + new Date(Date.now()).toISOString() + ']', event }];
+        const dataRaw = [{ level: 'ERR', timestamp: '[' + new Date(Date.now()).toISOString() + ']', event }];
+        /* tslint:disable:forin */
         for (const arg in args) {
             data[0][arg] = chalk_1.default.red(arg) + '=' + args[arg];
-        }
-        for (const arg in args) {
             dataRaw[0][arg] = arg + '=' + args[arg];
         }
+        /* tslint:enable:forin */
         const line = columnify_1.default(data, { showHeaders: false, config: { level: { minWidth: 4 }, event: { minWidth: 30 } } });
         const lineRaw = columnify_1.default(dataRaw, { showHeaders: false, config: { level: { minWidth: 4 }, event: { minWidth: 30 } } }) + '\n';
+        /* tslint:disable:no-console */
         console.log(line);
-        fs_1.default.appendFile(this.machine.paths['log'], lineRaw, (err) => {
+        /* tslint:enable:no-console */
+        fs_1.default.appendFile(this.machine.paths.log, lineRaw, (err) => {
             if (err) {
+                /* tslint:disable:no-console */
                 console.log(err);
+                /* tslint:enable:no-console */
             }
         });
     }

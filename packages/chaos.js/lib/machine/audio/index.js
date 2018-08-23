@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sound_player_1 = __importDefault(require("sound-player"));
 const process_exists_1 = __importDefault(require("process-exists"));
+const sound_player_1 = __importDefault(require("sound-player"));
 class Audio {
     constructor(machine) {
         this.machine = machine;

@@ -1,6 +1,6 @@
-import Machine from '../'
-import player from 'sound-player'
 import processExists from 'process-exists'
+import player from 'sound-player'
+import Machine from '../'
 
 export default class Audio {
   public machine: Machine
@@ -8,7 +8,7 @@ export default class Audio {
 
   constructor(machine: Machine) {
     this.machine = machine
-    this.player = new player({ player: 'mpg123', filename: '' })
+    this.player  = new player({ player: 'mpg123', filename: '' })
   }
 
   public async shuffle(): Promise<string> {

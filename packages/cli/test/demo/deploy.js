@@ -29,7 +29,9 @@ const main = async () => {
   console.log('[address:saved]')
 
   const chaos   = new Client({ address: contract.address })
-  const machine = await Machine.launch({ ethereum: 'http://localhost:8545', address: contract.address })
+  const machine = new Machine({ contract: contract.address })
+
+  await machine.start()
 
   await machine.token.register(token_1.address)
   await machine.token.register(token_2.address)

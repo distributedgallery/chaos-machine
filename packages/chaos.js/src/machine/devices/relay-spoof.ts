@@ -1,10 +1,6 @@
 export default class RelaySpoof {
-
-	constructor(opts?: any) {}
-
-	turnOn() {}
-
-	turnOff() {}
-
-	close() {}
+  constructor(opts?: any) {/**/}
+  public turnOn() {/**/}
+  public turnOff() {/**/}
+  public close() {/**/}
 }

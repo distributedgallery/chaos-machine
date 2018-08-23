@@ -1,6 +1,6 @@
+import yargs from 'yargs'
 import * as chaosconfig from '../../lib/config'
 import prompt from '../../ui/inquirer'
-import yargs from 'yargs'
 
 const builder = () => {
   return yargs
@@ -12,12 +12,8 @@ const builder = () => {
       describe: 'Set ethereum gateway address',
       type: 'string'
     })
-    .option('address', {
-      describe: 'Set contract address',
-      type: 'string'
-    })
-    .option('mnemonic', {
-      describe: 'Set ethereum account mnemonic',
+    .option('contract', {
+      describe: 'Set chaos contract address',
       type: 'string'
     })
     .option('devices', {
@@ -28,11 +24,11 @@ const builder = () => {
     .version(false)
 }
 
-const handler = async argv => {
+const handler = async (argv) => {
   try {
-    if(!chaosconfig.exists()) { chaosconfig.init() }
+    if (!chaosconfig.exists()) { chaosconfig.init() }
 
-    if(argv.ipfs) {
+    if (argv.ipfs) {
       const current = chaosconfig.load()
       current.ipfs = argv.ipfs
       chaosconfig.save(current)
@@ -40,13 +36,9 @@ const handler = async argv => {
       const current = chaosconfig.load()
       current.ethereum = argv.ethereum
       chaosconfig.save(current)
-    } else if (argv.address) {
+    } else if (argv.contract) {
       const current = chaosconfig.load()
-      current.address = argv.address
-      chaosconfig.save(current)
-    } else if (argv.mnemonic) {
-      const current = chaosconfig.load()
-      current.mnemonic = argv.mnemonic
+      current.contract = argv.contract
       chaosconfig.save(current)
     } else if (typeof argv.devices !== 'undefined') {
       const current = chaosconfig.load()
@@ -57,7 +49,9 @@ const handler = async argv => {
       chaosconfig.save(configuration)
     }
   } catch (err) {
+    /* tslint:disable:no-console*/
     console.log('[error] ' + err.message)
+    /* tslint:enable:no-console */
   }
 }
 

@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lcd_1 = __importDefault(require("lcd"));
 const events_1 = __importDefault(require("events"));
+const lcd_1 = __importDefault(require("lcd"));
 class LCD extends events_1.default {
     constructor(opts) {
         super();
@@ -15,9 +15,10 @@ class LCD extends events_1.default {
         this.lcd.on('ready', () => this.emit('ready'));
     }
     write(text, cb) {
-        // this.lcd.setCursor(0, 0);
         this.lcd.clear((err, result) => {
-            this.lcd.print(text, err => cb && cb(err));
+            setTimeout(() => {
+                this.lcd.print(text, (error) => cb && cb(error));
+            }, 200);
         });
     }
     close() {

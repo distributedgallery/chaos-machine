@@ -1,61 +1,40 @@
 import IPFS from 'ipfs-api'
+import Lcd from 'lcd'
 import os from 'os'
 import path from 'path'
 import contractor from 'truffle-contract'
-// import HDWalletProvider from 'truffle-hdwallet-provider'
 import parser from 'url-parse'
 import util from 'util'
 import Web3 from 'web3'
 import Audio from './audio'
 import Cash from './devices/cash'
-import Lcd from 'lcd'
 import Printer from './devices/printer'
-import Relay from './devices/relay-spoof'
 import fs from './fs'
 import Log from './log'
 import Token from './token'
 import Track from './track'
 
-
-interface LCD {
+interface ILCD {
   lcd: Lcd
-  on(event: string, cb: Function): void
-  write(text: string, cb: Function): void
+  on(event: string, cb: (err: any, result: any) => void): void
+  write(text: string, cb: (err: any, result: any) => void): void
   close(): void
 }
 
+interface IRelay {
+  gpio: any
+  turnOn(): void
+  turnOff(): void
+  close(): void
+}
 
-// interface LCD
-
-
-const LCD = os.type() === 'Linux' ? require('./devices/lcd') : require('./devices/lcd-spoof')
-
-
-
-// let IRelay
-// (async () => {
-//   console.log(os.type())
-//   if (os.type() === 'Linux') {
-//
-//     ILCD = await import('./devices/lcd')
-//     IRelay = await import('./devices/relay')
-//   } else {
-//     ILCD = await import('./devices/lcd-spoof')
-//     IRelay = await import('./devices/relay-spoof')
-//   }
-// })()
-
-// const DEFAULTS = {
-//   ADDRESS: '0xcdf45df24d878dd7e564a72802ba23031acfac07'
-//   CONTRACT: '0xcdf45df24d878dd7e564a72802ba23031acfac07',
-//   DEVICES: false,
-//   ETHEREUM: 'http://localhost:8545',
-//   IPFS: 'https://ipfs.infura.io:5001',
-//   MNEMONIC: 'journey nice rather ball theme used uncover gate pond rifle between state'
-// }
+/* tslint:disable:no-var-requires */
+const LCD   = os.type() === 'Linux' ? require('./devices/lcd') : require('./devices/lcd-spoof')
+const Relay = os.type() === 'Linux' ? require('./devices/relay') : require('./devices/relay-spoof')
+/* tslint:enable:no-var-requires */
 
 function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export default class Machine {
@@ -67,24 +46,25 @@ export default class Machine {
     ipfs: 'https://ipfs.infura.io:5001'
   }
   // core
-  public ipfs:        any
-  public web3:        any
+  public ipfs: any
+  public web3: any
   public abstraction: any
-  public contract:    any
+  public contract: any
+  public address?: string
   // utils
   public paths: any
-  public fs:    any
+  public fs: any
   // components
-  public log:   Log
+  public log: Log
   public token: Token
   public track: Track
   public audio: Audio
   // devices
-  public cash?:     Cash
-  public printer?:  Printer
-  public lcd?:      LCD
-  public fans?:     Relay
-  public resistor?: Relay
+  public cash?: Cash
+  public printer?: Printer
+  public lcd?: ILCD
+  public fans?: IRelay
+  public resistor?: IRelay
 
   constructor({
     contract = Machine.defaults.contract,
@@ -93,9 +73,9 @@ export default class Machine {
     ipfs     = Machine.defaults.ipfs
   }: {
     contract?: string
-    devices?:  boolean
+    devices?: boolean
     ethereum?: string
-    ipfs?:     string
+    ipfs?: string
   } = {}) {
     // IPFS
     const url = parser(ipfs)
@@ -104,7 +84,7 @@ export default class Machine {
     this.web3 = new Web3(new Web3.providers.HttpProvider(ethereum))
     // abstraction
     this.abstraction = contractor(require('@chaosmachine/core/build/contracts/Chaos.json'))
-    this.abstraction.setProvider(this.web3.currentProvider)
+    this.abstraction.setProvider(new Web3.providers.HttpProvider(ethereum))
     // contract
     this.contract = this.abstraction.at(contract)
     // utils
@@ -137,7 +117,7 @@ export default class Machine {
         })
         this.lcd!.on('ready', () => {
           this.log.info('LCD ready')
-          this.lcd!.write('HI, CHAOS MACHINE', (err) => {
+          this.lcd!.write('HI, CHAOS', (err) => {
             if (err) { this.log.error(err.toString()) }
           })
         })
@@ -166,14 +146,13 @@ export default class Machine {
             this.log.info('Registering token', { token: token.address })
             await this.token.register(token.address)
             this.log.info('Token registered', { token: token.address })
-            this.lcd!.write('WELCOME CHAOS', (err) => {
+            this.lcd!.write('HI, CHAOS', (err) => {
               if (err) { this.log.error(err.toString()) }
             })
             this.cash!.ssp.enable()
           } catch (err) {
             this.log.error(err.toString())
           }
-
 
         })
       } catch (err) {
@@ -202,15 +181,15 @@ export default class Machine {
     if (!this.fs.exists(this.paths.tracks)) { this.fs.mkdir(this.paths.tracks) }
 
     const accounts = await util.promisify(this.web3.eth.getAccounts)()
-    this.abstraction.defaults({ from: accounts[0] })
+    this.address   = accounts[0]
 
     const event = this.contract.TokenGranted({}, { fromBlock: 'latest', toBlock: 'latest' })
-    event.watch((err, result) => {
+    event.watch(async (err, result) => {
       if (err) {
         this.log.error(err)
       } else {
         this.log.info('Token granted', { machine: result.args.machine, token: result.args.token })
-        this.audio.shuffle()
+        await this.audio.shuffle()
       }
     })
   }

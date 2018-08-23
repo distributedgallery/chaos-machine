@@ -1,6 +1,6 @@
 {
 	"name": "@chaosmachine/cli",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "CLI for the Chaos Machine",
 	"keywords": [
 		"ethereum",
@@ -22,7 +22,7 @@
 	},
 	"scripts": {
 		"build": "node_modules/.bin/parcel build src/index.ts --target node -d lib -o chaos && node scripts/shebang.js",
-		"lint": "./node_modules/.bin/tslint --fix src/**/*.ts{,x}",
+		"lint": "./node_modules/.bin/tslint --fix -p tsconfig.json",
 		"test:deploy": "node -r esm test/demo/deploy.js",
 		"test:demo": "node -r esm test/demo/index.js",
 		"test:mainnet": "node -r esm test/demo/mainnet.js"

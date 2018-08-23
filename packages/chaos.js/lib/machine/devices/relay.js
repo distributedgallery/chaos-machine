@@ -4,17 +4,12 @@ const onoff = require("onoff");
 var Gpio = onoff.Gpio;
 class Relay {
     constructor(opts) {
-        if (!opts.pin)
+        if (!opts.pin) {
             throw new Error('[Relay] Please specify a pin!');
+        }
         if (Gpio.accessible) {
             this.gpio = new Gpio(opts.pin, 'out');
             this.turnOff();
-        }
-        else {
-            this.gpio = {
-                writeSync: value => console.log(`writing: ${value}`),
-                unexport: () => console.log(`unexporting`),
-            };
         }
     }
     turnOn() {
@@ -24,8 +19,9 @@ class Relay {
         this.gpio.writeSync(1);
     }
     close() {
-        if (Gpio.accessible)
+        if (Gpio.accessible) {
             this.gpio.unexport();
+        }
     }
 }
 exports.default = Relay;
