@@ -1,7 +1,7 @@
 import onoff = require('onoff')
 import Gpio  = onoff.Gpio
 
-export default class Relay {
+class Relay {
   public gpio: any
 
   constructor(opts) {
@@ -25,3 +25,5 @@ export default class Relay {
     if (Gpio.accessible) { this.gpio.unexport() }
   }
 }
+
+export = Relay

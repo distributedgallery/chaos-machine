@@ -17,7 +17,7 @@ import Track from './track'
 interface ILCD {
   lcd: Lcd
   on(event: string, cb: (err: any, result: any) => void): void
-  write(text: string, cb: (err: any, result: any) => void): void
+  write(text: string): void
   close(): void
 }
 
@@ -104,7 +104,7 @@ export default class Machine {
       try {
         this.cash     = new Cash({ port: '/dev/cash' })
         this.printer  = new Printer({ port: '/dev/printer' })
-        this.lcd      = new LCD({ rs: 25, e: 24, data: [23, 17, 27, 22] })
+        this.lcd      = new LCD({ rs: 25, e: 24, data: [23, 17, 27, 22], cols: 16, rows: 2 })
         this.fans     = new Relay({ pin: 15 })
         this.resistor = new Relay({ pin: 14 })
 
@@ -117,38 +117,35 @@ export default class Machine {
         })
         this.lcd!.on('ready', () => {
           this.log.info('LCD ready')
-          this.lcd!.write('HI, CHAOS', (err) => {
-            if (err) { this.log.error(err.toString()) }
-          })
+          this.lcd!.write('HI, CHAOS')
         })
         // event handling
         this.printer!.on('done', (data) => this.log.info('QRCode printed'))
         this.cash!.on('accepted', async () => {
           try {
             this.log.info('Bill burning')
-            this.lcd!.write('BURNING BILL', (err) => {
-              if (err) { this.log.error(err.toString()) }
-            })
             this.cash!.ssp.disable()
             this.resistor!.turnOn()
+            this.lcd!.write('BURNING BILL')
             await timeout(20000)
             this.resistor!.turnOff()
+            this.lcd!.write('BURNING BILL')
             await timeout(5000)
             this.resistor!.turnOn()
+            this.lcd!.write('BURNING BILL')
             await timeout(10000)
             this.resistor!.turnOff()
+            this.lcd!.write('BURNING BILL')
             const token = this.token.generate()
             this.log.info('Generating token', { token: token.address})
             this.printer!.printShort('https://chaos.distributedgallery.com/upload/' + token.privateKey)
-            this.lcd!.write('TAKE YOUR TICKET', (err) => {
-              if (err) { this.log.error(err.toString()) }
-            })
+            this.lcd!.write('TAKE YOUR TICKET')
+            await timeout(5000)
+            this.lcd!.write('WAIT FOR MINING')
             this.log.info('Registering token', { token: token.address })
             await this.token.register(token.address)
             this.log.info('Token registered', { token: token.address })
-            this.lcd!.write('HI, CHAOS', (err) => {
-              if (err) { this.log.error(err.toString()) }
-            })
+            this.lcd!.write('HI, CHAOS')
             this.cash!.ssp.enable()
           } catch (err) {
             this.log.error(err.toString())
@@ -159,7 +156,14 @@ export default class Machine {
         this.log.error(err.toString())
       }
       // exit process nicely
-      process.on('SIGINT', () => process.exit(0))
+      process.on('SIGINT', () => {
+        // this.cash!.close()
+        // this.printer!.close()
+        // this.lcd!.close()
+        // this.fans!.close()
+        // this.resistor!.close()
+        process.exit(0)
+      })
       process.on('uncaughtException', (err) => {
         this.log.error(err.toString())
       })

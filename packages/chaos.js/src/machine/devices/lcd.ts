@@ -2,8 +2,9 @@ import EventEmitter from 'events'
 import Lcd from 'lcd'
 import os from 'os'
 
-export default class LCD extends EventEmitter {
+class LCD extends EventEmitter {
   public lcd?: Lcd
+  public opts: any
 
   constructor(opts) {
     super()
@@ -11,22 +12,29 @@ export default class LCD extends EventEmitter {
     if (!opts.rs || !opts.e || !opts.data || opts.data.length !== 4) {
       throw new Error('[Lcd] Please specifiy the correct pins')
     }
-    this.lcd = new Lcd(opts)
-    this.lcd.on('ready', () => this.emit('ready'))
+    this.opts = opts
+    this.lcd  = new Lcd(opts)
+    this.lcd.on('ready', () => {
+      this.lcd.setCursor(0, 0)
+      this.lcd.noCursor()
+      this.emit('ready')
+    })
   }
 
-  public write(text, cb) {
-    this.lcd.clear((err, result) => {
-      setTimeout(() => {
-        this.lcd.setCursor(0, 0)
-        this.lcd.print(text, (error) => cb && cb(error))
-      }, 200)
+  public write(text) {
+    this.lcd  = new Lcd(this.opts)
+    this.lcd.on('ready', () => {
+      this.lcd.setCursor(0, 0)
+      this.lcd.noCursor()
+      this.lcd.clear((err) => {
+        this.lcd.print(text)
+      })
     })
   }
 
   public close() {
-    if (this.lcd) {
-      this.lcd.clear((err, result) => this.lcd.close())
-    }
+    this.lcd.clear((err) => this.lcd.close())
   }
 }
+
+export = LCD

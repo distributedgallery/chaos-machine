@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const onoff = require("onoff");
 var Gpio = onoff.Gpio;
 class Relay {
@@ -24,4 +23,4 @@ class Relay {
         }
     }
 }
-exports.default = Relay;
+module.exports = Relay;
