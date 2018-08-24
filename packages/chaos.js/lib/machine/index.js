@@ -89,7 +89,7 @@ class Machine {
                         this.printer.printShort('https://chaos.distributedgallery.com/upload/' + token.privateKey);
                         this.lcd.write('TAKE YOUR TICKET');
                         await timeout(5000);
-                        this.lcd.write('WAIT FOR TX MINED');
+                        this.lcd.write('WAIT FOR MINING');
                         this.log.info('Registering token', { token: token.address });
                         await this.token.register(token.address);
                         this.log.info('Token registered', { token: token.address });
