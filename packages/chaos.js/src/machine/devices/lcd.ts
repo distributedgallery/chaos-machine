@@ -18,6 +18,7 @@ export default class LCD extends EventEmitter {
   public write(text, cb) {
     this.lcd.clear((err, result) => {
       setTimeout(() => {
+        this.lcd.setCursor(0, 0)
         this.lcd.print(text, (error) => cb && cb(error))
       }, 200)
     })
