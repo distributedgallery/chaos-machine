@@ -1,6 +1,6 @@
 {
 	"name": "@chaosmachine/cli",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "CLI for the Chaos Machine",
 	"keywords": [
 		"ethereum",
@@ -36,7 +36,7 @@
 		"typescript": "^3.0.1"
 	},
 	"dependencies": {
-		"@chaosmachine/chaos.js": "file:../chaos.js",
+		"@chaosmachine/chaos.js": "^2.2.0",
 		"asciiart-logo": "^0.1.7",
 		"inquirer": "^6.1.0",
 		"jsonfile": "^4.0.0",

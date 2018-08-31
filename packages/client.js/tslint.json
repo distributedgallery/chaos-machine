@@ -1,0 +1,13 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "max-line-length": [true, 200],
+    "align": [true, "parameters", "statements", "members", "elements"],
+    "semicolon": [true, "never"],
+    "quotemark": [true, "single"],
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
+  },
+  "rulesDirectory": []
+}

@@ -1,36 +1,58 @@
 <template>
-  <div id="upload-track" class="page fullscreen">
-    <ui-title>Register a track</ui-title>
-    <div class="content">
-      <ui-dropbox v-on:change="fileUpdated">
-        {{ placeholder }}
-      </ui-dropbox>
-      <ui-button :class="track.valid ? '': 'disabled'" v-on:click="upload">Register track</ui-button>
+    <div id="upload-track" class="flex fullscreen">
+        <ui-title>Register a track</ui-title>
+
+        <div v-if="!$store.state.web3" class="content">
+            <ui-frame>
+                Your browser does not come with an ethereum wallet.<br>
+                Install <a href="#" target="_blank">Metamask</a>, fill it with
+                <a href="#" target="_blank">a few ETHs</a>
+                and come back once you're done.
+            </ui-frame>
+        </div>
+
+        <div v-else-if="$store.state.network !== '1'" class="content">
+            <ui-frame>
+                Your wallet is connected to the wrong network.<br>
+                Please select 'Ethereum Main Net' in Metamask.
+            </ui-frame>
+        </div>
+
+        <div v-else-if="!$route.params.token" class="content">
+            <ui-frame>
+                You need an access token to upload a track.<br>
+                Please scan a ChaosMachine printed QRCode <router-link to="authenticate">here</router-link> to authenticate.
+            </ui-frame>
+        </div>
+
+        <div v-else class="content">
+            <ui-frame>access token: {{ $route.params.token }}</ui-frame>
+            <ui-dropbox v-on:change="fileUpdated">{{ placeholder }}</ui-dropbox>
+            <ui-button :class="track.valid ? '': 'disabled'" v-on:click="upload">Register track</ui-button>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
+import Chaos from '@chaosmachine/client.js'
 import isMp3 from 'is-mp3'
 import IPFS from 'ipfs-api'
 import title from './ui/title'
 import dropbox from './ui/dropbox'
 import button from './ui/button'
+import frame from './ui/frame'
+
 
 export default {
-  name: 'dashboard',
-  components: { 'ui-title': title, 'ui-dropbox': dropbox, 'ui-button': button },
+  name: 'upload',
+  components: { 'ui-title': title, 'ui-dropbox': dropbox, 'ui-button': button, 'ui-frame': frame },
   data() {
     return {
       track: {
         valid: false,
         buffer: undefined,
         name: undefined
-      },
-      reader: null,
-      proposals: [],
-      newProposal: undefined,
-      winningProposal: undefined
+      }
     }
   },
   computed: {
@@ -44,20 +66,20 @@ export default {
   },
   methods: {
     fileUpdated: function(files) {
-      const self = this
-      const reader = new FileReader()
+      const self    = this
+      const reader  = new FileReader()
+
       reader.onload = function(e) {
         const buffer = Buffer(reader.result)
         if (!isMp3(buffer)) {
-          self.track.valid = false
+          self.track.valid  = false
           self.track.buffer = undefined
-          self.track.name = undefined
+          self.track.name   = undefined
           self.$notify({
-            group: 'all',
-            type: 'error',
-            title: 'Wrong file format',
-            text:
-              'The ChaosMachine only handles .mp3 files. Please pick a mp3 encoded track.',
+            group:    'all',
+            type:     'error',
+            title:    'Wrong file format',
+            text:     'The ChaosMachine only handles .mp3 files. Please pick a mp3 encoded track.',
             duration: 10000
           })
         } else {
@@ -66,42 +88,39 @@ export default {
           self.track.name = files[0].name
           self.$notify({
             group: 'all',
-            type: 'success',
+            type:  'success',
             title: 'Valid file',
-            text: 'You can now register your track on the blockchain.'
+            text:  'You can now register your track on the blockchain.'
           })
         }
       }
       reader.readAsArrayBuffer(files[0])
     },
     upload: async function() {
+        const chaos   = new Client({ provider: window.web3.currentProvider })
       if (this.track.valid) {
         const ipfs = IPFS({
-          host: 'ipfs.infura.io',
-          port: '5001',
+          host:     'ipfs.infura.io',
+          port:     '5001',
           protocol: 'https'
         })
 
         this.$notify({
-          group: 'all',
-          title: 'Uploading track',
-          text:
-            'Your track is being uploaded to IPFS.<br><div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>',
+          group:    'all',
+          title:    'Uploading track',
+          text:     'Your track is being uploaded to IPFS.<br><div class="spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>',
           duration: -1
         })
 
-        const results = await ipfs.files.add(this.track.buffer)
+        const results = await chaos.track.upload(this.track.buffer)
+
+        this.$notify({ group: 'all', clean: true })
 
         this.$notify({
-          group: 'all',
-          clean: true
-        })
-
-        this.$notify({
-          group: 'all',
-          type: 'success',
-          title: 'Track uploaded',
-          text: 'Hash: ' + results[0].hash,
+          group:    'all',
+          type:     'success',
+          title:    'Track uploaded',
+          text:     'Hash: ' + results[0].hash,
           duration: 10000
         })
       }
@@ -178,36 +197,5 @@ form {
   width: 30%;
 }
 
-.fullscreen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-height: 100vh;
-  width: 100vw;
-}
 
-.flex {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  min-height: 100%;
-
-  h1 {
-    flex: 0 1 auto;
-    /* The above is shorthand for:
-  flex-grow: 0,
-  flex-shrink: 1,
-  flex-basis: auto
-  */
-  }
-
-  .content {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-}
 </style>

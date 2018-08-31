@@ -33,9 +33,6 @@ const LCD   = os.type() === 'Linux' ? require('./devices/lcd') : require('./devi
 const Relay = os.type() === 'Linux' ? require('./devices/relay') : require('./devices/relay-spoof')
 /* tslint:enable:no-var-requires */
 
-function timeout(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 export default class Machine {
   // defaults parameters

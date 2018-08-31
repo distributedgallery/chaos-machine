@@ -20,6 +20,10 @@ export default new Router({
     },
     {
       path: '/upload',
+      component: Upload
+    },
+    {
+      path: '/upload/:token',
       name: 'upload',
       component: Upload
     }
